@@ -1,4 +1,5 @@
 resource "aws_security_group" "alb-public" {
+  count = var.INTERNAL ? 0 : 1
   name        = "roboshop-public-${var.ENV}-alb-sg"
   description = "allow http inbound traffic from internet only"
   vpc_id      = data.terraform_remote_state.vpc.outputs.VPC_ID
@@ -26,6 +27,7 @@ resource "aws_security_group" "alb-public" {
 }
 
 resource "aws_security_group" "alb-private" {
+  count = var.INTERNAL ? 1 : 9
   name        = "roboshop-private-${var.ENV}-alb-sg"
   description = "allow traffic only from public LB"
   vpc_id      = data.terraform_remote_state.vpc.outputs.VPC_ID
